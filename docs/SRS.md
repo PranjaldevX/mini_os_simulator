@@ -1,6 +1,13 @@
 # Software Requirements Specification: Mini OS Simulator
 
-Version 0.1 (baseline) | October 27, 2026 Author: Pranjal Yadav | Operating Systems Lab, ZHCET, AMU
+Version 0.2 (baseline) | October 27, 2026 Author: Pranjal Yadav | Operating Systems Lab, ZHCET, AMU
+
+## Revision History
+
+| Version | Date | Change |
+|---|---|---|
+| 0.1 | 2026-10-27 | Baseline |
+| 0.2 | <today> | Ubuntu on WSL2 set as the primary environment; MSYS2/MinGW no longer targeted |
 
 ## 1. Introduction
 
@@ -66,7 +73,7 @@ Each module can also run standalone (scheduler only, paging only, disk only) so 
 ### 2.4 Operating Environment
 
 - Language standard: C++17, standard library only (no third-party libraries)
-- Compiler: g++ on Windows with MSYS2/MinGW-w64 (posix thread model) or on Linux/WSL2
+- Primary environment: Ubuntu on WSL2 with g++ (C++17) and GNU make
 - Build: Makefile
 - Interface: command line, text output
 
@@ -226,7 +233,7 @@ All output goes to standard output as plain text: Gantt chart, reference trace, 
 | --- | --- |
 | NFR-1 Correctness | Results shall match the reference values in Section 6 |
 | NFR-2 Determinism | The same input and configuration shall give byte-identical output. Any random workload generation shall use a user-supplied seed |
-| NFR-3 Portability | The code shall build with g++ using -std=c++17 on MSYS2/MinGW-w64 and on Linux/WSL2 without source changes |
+| NFR-3 Portability | The code shall build with g++ using -std=c++17 on Ubuntu (WSL2 is the primary environment) without source changes |
 | NFR-4 Extensibility | Adding an algorithm shall require one new source file and one registration line, without editing other algorithms |
 | NFR-5 Performance | Target: a workload of 1,000 processes and 100,000 total page references completes within 10 seconds on a typical laptop. To be confirmed by measurement |
 | NFR-6 Readability | Descriptive names, one header and source pair per module, no global mutable state outside the simulator object |
