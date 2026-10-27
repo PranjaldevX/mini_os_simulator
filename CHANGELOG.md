@@ -7,3 +7,4 @@ Versioning follows Semantic Versioning.
 
 ### Added
 - Repository scaffolding: folder layout, formatting rules, PR and issue templates
+- docs/SRS.md added at v0.2 (Ubuntu/WSL2 as primary environment)
