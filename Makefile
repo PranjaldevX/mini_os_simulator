@@ -29,3 +29,25 @@ $(BUILD_DIRECTORY)/%.o: $(SOURCE_DIRECTORY)/%.cpp
 
 clean:
 	rm -rf $(BUILD_DIRECTORY)
+
+# ---- tests ----
+# Every tests/test_*.cpp becomes build/test_* and is linked with all of src/ except main.cpp.
+
+TEST_DIRECTORY  := tests
+TEST_SOURCES    := $(wildcard $(TEST_DIRECTORY)/test_*.cpp)
+TEST_PROGRAMS   := $(patsubst $(TEST_DIRECTORY)/%.cpp,$(BUILD_DIRECTORY)/%,$(TEST_SOURCES))
+LIBRARY_OBJECTS := $(filter-out $(BUILD_DIRECTORY)/main.o,$(OBJECT_FILES))
+
+.PHONY: test
+
+$(BUILD_DIRECTORY)/test_%: $(TEST_DIRECTORY)/test_%.cpp $(LIBRARY_OBJECTS)
+	@mkdir -p $(BUILD_DIRECTORY)
+	$(COMPILER) $(COMPILE_FLAGS) $< $(LIBRARY_OBJECTS) -o $@ $(EXTRA_FLAGS)
+
+test: $(TEST_PROGRAMS)
+	@for test_program in $(TEST_PROGRAMS); do \
+	    echo "== running $$test_program"; \
+	    $$test_program || exit 1; \
+	done
+
+-include $(TEST_PROGRAMS:=.d)
