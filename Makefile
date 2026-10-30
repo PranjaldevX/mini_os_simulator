@@ -51,3 +51,11 @@ test: $(TEST_PROGRAMS)
 	done
 
 -include $(TEST_PROGRAMS:=.d)
+
+# ---- sanitizers ----
+# Rebuilds into build/sanitize with ASan + UBSan, then runs all tests.
+
+.PHONY: sanitize
+
+sanitize:
+	$(MAKE) test BUILD_DIRECTORY=build/sanitize EXTRA_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
