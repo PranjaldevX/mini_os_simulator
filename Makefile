@@ -59,3 +59,17 @@ test: $(TEST_PROGRAMS)
 
 sanitize:
 	$(MAKE) test BUILD_DIRECTORY=build/sanitize EXTRA_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+
+# ---- formatting ----
+# make format        rewrites files to match .clang-format
+# make format-check  fails if any file is not formatted (used by CI)
+
+FORMAT_FILES := $(wildcard $(SOURCE_DIRECTORY)/*.cpp include/*.h $(TEST_DIRECTORY)/*.cpp $(TEST_DIRECTORY)/*.h)
+
+.PHONY: format format-check
+
+format:
+	clang-format -i $(FORMAT_FILES)
+
+format-check:
+	clang-format --dry-run --Werror $(FORMAT_FILES)
