@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+
+      - name: Show tool versions
+        run: |
+          g++ --version
+          clang-format --version
+          make --version
+
+      - name: Check formatting
+        run: make format-check
+
+      - name: Build with warnings as errors
+        run: make EXTRA_FLAGS=-Werror
+
+      - name: Run tests with warnings as errors
+        run: make test EXTRA_FLAGS=-Werror
+
+      - name: Run tests under sanitizers
+        run: make sanitize
